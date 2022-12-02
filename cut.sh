@@ -9,11 +9,11 @@ touch "input/day$1_sample"
 echo "creating : input/day$1"
 touch "input/day$1"
 
-SESSION_ID='53616c7465645f5f76c4922c57e10324baa820a3a3223e41d332c7d5deeefa04e69187fc7c77579a2e0806db55f96587'
+SESSION_ID='53616c7465645f5f919990cf7f29b434e81f5acfd849e4f7876ab9e314de0f9653b902edfa43f9dca525c16304a525295008d060267d871594ff0c28fc5f12de'
 
-echo "loading from : https://adventofcode.com/2021/day/$1/input to input/day$1"
+echo "loading from : https://adventofcode.com/2022/day/$1/input to input/day$1"
 
-curl "https://adventofcode.com/2021/day/$1/input" \
+curl "https://adventofcode.com/2022/day/$1/input" \
   -H 'authority: adventofcode.com' \
   -H 'cache-control: max-age=0' \
   -H 'upgrade-insecure-requests: 1' \

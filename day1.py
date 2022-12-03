@@ -1,9 +1,9 @@
 import copy
 from pathlib import Path
-import sys
 
-# TEST_MODE = bool(len(sys.argv) > 1 and sys.argv[1] == "test")
+
 TEST_MODE = False
+
 
 def phase1(v):
     return calc(v)[0]
@@ -22,5 +22,3 @@ if __name__ == "__main__":
         values = [map(lambda x: int(x), line.split("\n")) for line in f.read().split("\n\n")]
         print(f'Phase 1: {phase1(copy.deepcopy(values))}')
         print(f'Phase 2: {phase2(copy.deepcopy(values))}')
-
-

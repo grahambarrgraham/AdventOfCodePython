@@ -1,5 +1,5 @@
 from pathlib import Path
-import sys
+
 
 TEST_MODE = False
 

@@ -19,7 +19,7 @@ def calc(size, v):
 
 
 def all_different(code, size):
-    return len({*code}) == size
+    return len(set(code)) == size
 
 
 def split(a_list: list, chunk_size: int) -> list:

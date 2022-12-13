@@ -15,8 +15,7 @@ def phase2(v):
 
 
 def generate_coords(v):
-    coords = [Coord(x, y) for x in range(len(v[0])) for y in range(len(v))]
-    return coords
+    return [Coord(x, y) for x in range(len(v[0])) for y in range(len(v))]
 
 
 def scenic_score(v, x, y):
@@ -35,7 +34,6 @@ def scene(view, height):
 def is_visible(v, x, y):
     def visible(fun):
         return max(fun(v, x, y)) < v[y][x]
-
     return on_edge(v, x, y) or visible(above) or visible(below) or visible(left) or visible(right)
 
 

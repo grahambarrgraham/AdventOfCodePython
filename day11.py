@@ -48,7 +48,7 @@ def monkey_round(monkeys, inspections, reduce_worry):
         monkey.items.clear()
 
 
-def parse(monkey_block):
+def parse(monkey_block) -> Monkey:
     lines = monkey_block.split('\n')
     items = [int(i) for i in extract(lines[1], ":").split(', ')]
     tmp = [i for i in extract(lines[2], "=").split(' ')]

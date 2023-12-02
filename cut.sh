@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export YEAR='2023'
+YEAR="${2:-2023}"
 SESSION_ID='53616c7465645f5fef5a326543893ac9bd0b00d72849c7723f087317c3bfa6a604916f156b7de90f7e26f63ead4663f3292d30f3cf561bfec602d97a3d265b68'
 
 echo "creating : $YEAR/day$1.py"

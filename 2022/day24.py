@@ -1,28 +1,43 @@
 import collections
 from pathlib import Path
-import lib.astar
-from paprika import *
 
-TEST_MODE = True
+import lib.astar
+
+TEST_MODE = False
 
 Coord = collections.namedtuple("Coord", "x y")
 
 
+def phase1(starting_map):
+    start_node = SearchNode(Coord(1, 0), 0)
+    target_location = Coord(len(starting_map[0]) - 2, len(starting_map) - 1)
+    maps = pre_build_maps(starting_map)
+    return search(maps, start_node, target_location).move_count
+
+
+def phase2(starting_map):
+    start_location = Coord(1, 0)
+    target_location = Coord(len(starting_map[0]) - 2, len(starting_map) - 1)
+    maps = pre_build_maps(starting_map)
+    outbound_1 = search(maps, SearchNode(start_location, 0), target_location)
+    return_for_snacks = search(maps, outbound_1, start_location)
+    outbound_2 = search(maps, return_for_snacks, target_location)
+    return outbound_2.move_count
+
+
 class SearchNode:
-    def __init__(self, _map, location: Coord, move_count: int):
-        self.map = _map
+    def __init__(self, location: Coord, move_count: int):
         self.location = location
         self.move_count = move_count
-        self.map[self.location.y][self.location.x].elves = True
 
     def __repr__(self):
         return f"SearchNode: {self.location}, {self.move_count}"
 
     def __hash__(self):
-        return hash(tuple([self.map, self.location]))
+        return hash(tuple([self.move_count, self.location]))
 
     def __eq__(self, other):
-        return self.__class__ == other.__class__ and self.map == other.map and self.location == other.location
+        return self.__class__ == other.__class__ and self.move_count == other.move_count and self.location == other.location
 
 
 class Node:
@@ -64,14 +79,14 @@ class Node:
             and self.edge == other.edge
 
 
-def phase1(v):
-    result = search(v)
-    print(result)
-    return -1
-
-
-def phase2(v):
-    return -1
+def pre_build_maps(starting_map):
+    maps = dict()
+    maps[0] = starting_map
+    n = starting_map
+    for i in range(1, 2000):
+        n = transform_map(n)
+        maps[i] = n
+    return maps
 
 
 def search_neighbours(location: Coord, _map):
@@ -90,29 +105,26 @@ def search_neighbours(location: Coord, _map):
     down = None if location.y + 1 > down_extent or not _map[location.y + 1][location.x].vacant \
         else Coord(location.x, location.y + 1)
 
-    return [i for i in [location, left, right, up, down] if i is not None]
+    wait = None if not _map[location.y][location.x].vacant else Coord(location.x, location.y)
+
+    return [(coord, desc) for coord, desc in
+            [(left, 'left'), (right, 'right'), (up, 'up'), (down, 'down'), (wait, 'wait')] if coord is not None]
 
 
-def search(_map):
-    start_node = SearchNode(_map, Coord(1, 0), 0)
-    target_location = Coord(len(_map[0]) - 2, len(_map) - 1)
-
+def search(_maps, start_node, target_location):
     def stop_func(search_node: SearchNode):
         return search_node.location == target_location
 
-    def find_neighbours_func(search_node: SearchNode, _unused):
-        print(f"Finding neighbours for {search_node}")
-        new_map = transform_map(search_node.map)
-        if not new_map[search_node.location.y][search_node.location.x].vacant:
-            return []
-        return [SearchNode(new_map, coord, search_node.move_count + 1) for coord in
-                search_neighbours(search_node.location, new_map)]
+    def find_neighbours_func(search_node: SearchNode, _maps):
+        new_map = _maps[search_node.move_count + 1]
+        neighbours = search_neighbours(search_node.location, new_map)
+        return [SearchNode(coord, search_node.move_count + 1) for coord, _ in neighbours]
 
     def cost_func(search_node: SearchNode, _unused):
         distance = abs(target_location.y - search_node.location.y) + abs(target_location.x - search_node.location.x)
         return search_node.move_count + distance
 
-    return lib.astar.a_star_algorithm(None, start_node, stop_func, find_neighbours_func, cost_func)
+    return lib.astar.a_star_algorithm(_maps, start_node, stop_func, find_neighbours_func, cost_func)
 
 
 def transform_map(_map):
@@ -189,5 +201,5 @@ def blizzard_neighbours(location, _map):
 if __name__ == "__main__":
     with Path(__file__).parent.joinpath("input/day24_sample" if TEST_MODE else "input/day24").open() as f:
         values = tuple([tuple([parse_node(c) for c in line.strip()]) for line in f])
-        print(f'Phase 1: {phase1(values)}')
+        # print(f'Phase 1: {phase1(values)}')
         print(f'Phase 2: {phase2(values)}')

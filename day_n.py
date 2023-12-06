@@ -1,7 +1,6 @@
 from pathlib import Path
-import sys
 
-TEST_MODE = bool(len(sys.argv) > 1 and sys.argv[1] == "test")
+TEST_MODE = True
 
 
 def phase1(v):

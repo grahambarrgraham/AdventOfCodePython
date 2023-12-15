@@ -21,7 +21,7 @@ def phase2(v):
     block_cache = dict()
     m = deepcopy(v)
 
-    # settles to a repeat ever 7 cycles after, so can extrapolate to 1000000000
+    # settles to a repeat every 7 cycles after, so can extrapolate to 1000000000
     for i in range(1000):
 
         if b not in block_cache:

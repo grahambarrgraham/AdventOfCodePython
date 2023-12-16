@@ -54,7 +54,7 @@ def phase2(v):
 def read_instruction(s):
     x = s.split('=')
     if len(x) == 1:
-        label = x[0][0:-1]
+            label = x[0][0:-1]
         return Instruction(label, 'remove', decode(label), None)
     label, b = x
     return Instruction(label, 'add', decode(label), int(b))

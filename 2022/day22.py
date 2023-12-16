@@ -99,12 +99,8 @@ class Map:
 def phase1(v):
     for i in v.directions:
         v.map.apply(i)
-        # print(f"{i} {v.map.loc}, {v.map.direction}")
-        # print(v.map)
 
-    score = (1000 * (v.map.loc.y + 1)) + (4 * (v.map.loc.x + 1)) + dir_score_map[v.map.direction]
-
-    return score
+    return (1000 * (v.map.loc.y + 1)) + (4 * (v.map.loc.x + 1)) + dir_score_map[v.map.direction]
 
 
 def phase2(v):

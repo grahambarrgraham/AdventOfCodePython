@@ -8,6 +8,8 @@ TEST_MODE = False
 Range = collections.namedtuple("Range", "start stop")
 
 
+# TAGS - intervals, ranges, NP, regexp
+
 def phase1(seeds: list[int], maps: dict):
     ranges = [Range(s, s + 1) for s in seeds]
     return min(r.start for r in process(maps, ranges))

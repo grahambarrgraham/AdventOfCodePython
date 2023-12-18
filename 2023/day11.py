@@ -6,6 +6,7 @@ TEST_MODE = False
 
 Coord = collections.namedtuple("Coord", "x y")
 
+# TAGS Manhattan distance, transpose
 
 def phase1(v):
     return process(v, 2)

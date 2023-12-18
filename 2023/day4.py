@@ -6,6 +6,8 @@ TEST_MODE = False
 
 Card = collections.namedtuple("card", "id, winners, numbers")
 
+# TAGS regexp
+
 
 def phase1(cards: list[Card]):
     card_scores = [score(find_winners(card)) for card in cards]

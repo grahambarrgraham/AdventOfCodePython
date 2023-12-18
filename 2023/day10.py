@@ -3,6 +3,8 @@ from pathlib import Path
 
 TEST_MODE = False
 
+# TAGS Polgon Area, Picks Formula, Shoelace Formuala
+
 all_neighbours_ = {(0, 1), (1, 0), (0, -1), (-1, 0)}
 
 neighbour_map = {

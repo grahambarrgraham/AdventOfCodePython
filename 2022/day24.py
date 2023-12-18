@@ -3,6 +3,8 @@ from pathlib import Path
 
 import astar
 
+# TAGS: search astar
+
 TEST_MODE = False
 
 Coord = collections.namedtuple("Coord", "x y")

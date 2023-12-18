@@ -5,6 +5,8 @@ from pathlib import Path
 
 TEST_MODE = False
 
+# TAGS: regexp finditer
+
 Coord = collections.namedtuple("Coord", "x y")
 
 

@@ -6,6 +6,8 @@ from pathlib import Path
 
 TEST_MODE = False
 
+# TAGS regexp rules
+
 
 @dataclasses.dataclass(frozen=True)
 class Rule:

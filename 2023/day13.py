@@ -3,6 +3,8 @@ from pathlib import Path
 
 TEST_MODE = False
 
+# TAGS: file-blocks, transpose
+
 
 def phase1(maps):
     return sum([calc(r, c) for r, c in process_maps(maps)])

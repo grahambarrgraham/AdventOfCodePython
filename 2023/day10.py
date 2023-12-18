@@ -1,9 +1,11 @@
-import dataclasses
+import collections
 from pathlib import Path
+
+from lib.polygon import polygon_area
 
 TEST_MODE = False
 
-# TAGS Polgon Area, Picks Formula, Shoelace Formuala
+# TAGS Polygon Area, Picks Formula, Shoelace
 
 all_neighbours_ = {(0, 1), (1, 0), (0, -1), (-1, 0)}
 
@@ -18,11 +20,7 @@ neighbour_map = {
     'S': all_neighbours_
 }
 
-
-@dataclasses.dataclass(frozen=True)
-class Coord:
-    x: int
-    y: int
+Coord = collections.namedtuple("Coord", "x, y")
 
 
 def phase1(m):
@@ -35,29 +33,10 @@ def phase2(m):
     start = find_start(m)
     loop = [c for c in loop_interator(start, parents)]
     b = len([x for x in loop])
-    vertices = [(c.x, c.y) for c in loop if c not in ['-', '|']]
-    vertices.append((start.x, start.y))
+    vertices = [c for c in loop if c not in ['-', '|']]
     area = polygon_area(vertices)
     # picks formula
     return area - b / 2 + 1
-
-
-def polygon_area(vertices):  # shoelace formula
-    num_vertices = len(vertices)
-    sum1 = 0
-    sum2 = 0
-
-    for i in range(0, num_vertices - 1):
-        sum1 = sum1 + vertices[i][0] * vertices[i + 1][1]
-        sum2 = sum2 + vertices[i][1] * vertices[i + 1][0]
-
-    # Add xn.y1
-    sum1 = sum1 + vertices[num_vertices - 1][0] * vertices[0][1]
-    # Add x1.yn
-    sum2 = sum2 + vertices[0][0] * vertices[num_vertices - 1][1]
-
-    area = abs(sum1 - sum2) / 2
-    return area
 
 
 def loop_interator(start, parents):

@@ -5,6 +5,8 @@ import astar
 
 TEST_MODE = False
 
+# TAG: search, astar
+
 Coord = collections.namedtuple("Coord", "x y")
 SearchNode = collections.namedtuple("SearchNode", "loc, previous_move")
 moves = {(0, 1), (0, -1), (1, 0), (-1, 0)}

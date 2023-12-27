@@ -105,7 +105,7 @@ def search(_maps, start_node: SearchNode, target_location: Coord):
     def heuristic_func(search_node: SearchNode, *_):
         return abs(target_location.y - search_node.location.y) + abs(target_location.x - search_node.location.x)
 
-    result = astar.find_path(start_node, None, find_neighbours_func,
+    result = match.find_path(start_node, None, find_neighbours_func,
                              reversePath=False,
                              distance_between_fnct=cost_func,
                              heuristic_cost_estimate_fnct=heuristic_func,

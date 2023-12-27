@@ -10,12 +10,12 @@ Node = collections.namedtuple("Node", "point, distance")
 
 
 def phase1(search):
-    return bfs(search.graph, search.start, search.end)
+    return bfs(search._duplex_graph, search.start, search.end)
 
 
 def phase2(v_search):
-    starts = [coord for coord in v_search.graph.keys() if v_search.lines[coord.y][coord.x] == 'a']
-    return min([bfs(v_search.graph, start, v_search.end) for start in starts])
+    starts = [coord for coord in v_search._duplex_graph.keys() if v_search.lines[coord.y][coord.x] == 'a']
+    return min([bfs(v_search._duplex_graph, start, v_search.end) for start in starts])
 
 
 def bfs(graph, start, destination):

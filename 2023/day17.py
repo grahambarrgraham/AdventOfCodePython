@@ -1,7 +1,7 @@
 import collections
 from pathlib import Path
 
-import astar
+import match
 
 TEST_MODE = False
 

@@ -1,4 +1,6 @@
+import math
 import re
+from collections import defaultdict
 from copy import deepcopy
 from pathlib import Path
 
@@ -12,8 +14,68 @@ def phase1(wfs, ratings):
     return acc
 
 
-def phase2(wfs, _):
-    return -1
+def phase2(wfs):
+    acc = defaultdict(list)
+    queue = [('in', {'x': (1, 4000), 'm': (1, 4000), 'a': (1, 4000), 's': (1, 4000)})]
+    all_accepts = []
+
+    while len(queue) > 0:
+        wf, xmas = queue.pop(0)
+        children, accepts = apply_workflow(wf, wfs, xmas)
+        queue.extend(children)
+        all_accepts.extend(accepts)
+
+    return sum(combinations(a) for a in all_accepts)
+
+
+def combinations(xmas):
+    return math.prod([xmas[i][1] - xmas[i][0] + 1 for i in 'xmas'])
+
+
+def apply_workflow(wf, wfs, xmas):
+    children = []
+    accepts = []
+    for wf in wfs[wf]:
+        if len(wf) > 1:
+            constraint, destination = wf
+            nxt_xmas = apply_inv_constraint(constraint, xmas)
+            if destination == 'A':
+                accepts.append(apply_constraint(constraint, xmas))
+            elif destination != 'R':
+                children.append((destination, apply_constraint(constraint, xmas)))
+            xmas = nxt_xmas
+        else:
+            destination = wf[0]
+            if destination == 'A':
+                accepts.append(xmas)
+            elif destination != 'R':
+                destination = wf[0]
+                children.append((destination, xmas))
+
+    return children, accepts
+
+
+def apply_inv_constraint(constraint, xmas):
+    letter, op, operand = parse_constraint(constraint)
+    xmas = deepcopy(xmas)
+    mn, mx = xmas[letter]
+    xmas[letter] = (mn, min(mx, operand)) if op == '>' else (max(mn, operand), mx)
+    return xmas
+
+
+def apply_constraint(constraint, xmas):
+    letter, op, operand = parse_constraint(constraint)
+    xmas = deepcopy(xmas)
+    mn, mx = xmas[letter]
+    xmas[letter] = (max(mn, operand + 1), mx) if op == '>' else (mn, min(mx, operand - 1))
+    return xmas
+
+
+def parse_constraint(constraint):
+    letter = constraint[0]
+    op = constraint[1]
+    operand = int(constraint[2:])
+    return letter, op, operand
 
 
 def workflows(wfs, x, m, a, s):
@@ -49,4 +111,4 @@ if __name__ == "__main__":
         _flows = read_flows(blocks[0])
         _ratings = [r[1:-1].split(',') for r in blocks[1]]
         print(f'Phase 1: {phase1(_flows, _ratings)}')
-        # print(f'Phase 2: {phase2(values)}')
+        print(f'Phase 2: {phase2(_flows)}')

@@ -23,7 +23,6 @@ def phase2(block_map):
         bm = deepcopy(block_map)
         bm.pop(idx)
         _, _, moves = settle(bm)
-        print(idx, moves)
         acc += moves
 
     return acc

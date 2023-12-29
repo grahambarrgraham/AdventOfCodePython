@@ -1,7 +1,10 @@
 import itertools
+from collections import defaultdict
+from functools import reduce
 from pathlib import Path
 
 TEST_MODE = False
+
 
 # vectors, dot product, intersect
 
@@ -19,8 +22,44 @@ def phase1(v):
     return len([b for b in acc if b is True])
 
 
-def phase2(v):
-    return -1
+def phase2(hail):
+    def vel_pos_map(axis_index):
+        acc = defaultdict(list)
+        for p, vv in hail:
+            acc[vv[axis_index]].append(p[axis_index])
+        return acc
+
+    # Inspiration from Reddit
+    # Many snowballs have the same speed in any given direction. Since we have to be able to hit both of the
+    # snowballs in any such pair, the coordinates of both must be equal modulo the speed of the rock. Once I took the
+    # intersection of all the possible speeds of pairwise equally fast snowballs I got a single possible speed value
+    # for each axis.
+
+    vx, vy, vz = velocity_for_axis(vel_pos_map(0)), velocity_for_axis(vel_pos_map(1)), velocity_for_axis(vel_pos_map(2))
+
+    # Inspiration from Reddit
+    # Any hailstone with velocity exactly vx, vy or vz will only intersect the rock if it shares the same coordinate as
+    # the rock in that dimension.  Otherwise, the rock would never catch it in that dimension.  It happens that
+    # there is at least one hailstone in the input with each of vx, vy and vz, and where there is more than one
+    # in that dimension they share the same coordinate.  So position of the rock is literally present in the input!
+
+    px, py, pz = vel_pos_map(0)[vx][0], vel_pos_map(1)[vy][0], vel_pos_map(2)[vz][0]
+
+    return px + py + pz
+
+
+def velocity_for_axis(vel_pos_map):
+    hail_with_same_velocity = {vel: pos for vel, pos in vel_pos_map.items() if len(pos) > 2}
+    candidates = defaultdict(set)
+
+    for hail_velocity, hail_positions in hail_with_same_velocity.items():
+        for i in range(-1000, 1000):
+            mods = {position % i for position in hail_positions if i != 0}
+            if len(mods) == 1:
+                candidates[hail_velocity].add(i + hail_velocity)
+
+    common_val = reduce(lambda a, b: a & b, candidates.values())
+    return common_val.pop()
 
 
 def crosses(a, b, in_area):
@@ -55,7 +94,6 @@ def is_between(p, a, b):
 
     d_x = x_b - x_a
     d_y = y_b - y_a
-    d_z = z_b - z_a
 
     if abs(d_x) >= abs(d_y):
         return x_a <= x_p <= x_b if d_x > 0 else x_b <= x_p <= x_a

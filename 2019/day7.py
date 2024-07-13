@@ -1,60 +1,60 @@
+import dataclasses
 import itertools
 from copy import deepcopy
 from pathlib import Path
 
 import day5
 
-TEST_MODE = True
+TEST_MODE = False
 
 
-def phase1(code):
-    return calc(code, find_thruster_signal_phase_1, [0, 1, 2, 3, 4])
+def phase1(amp_code):
+    return find_max_signal(amp_code, [0, 1, 2, 3, 4])
 
 
-def phase2(code):
-    return calc(code, find_thruster_signal_phase_2, [5, 6, 7, 8, 9])
+def phase2(amp_code):
+    return find_max_signal(amp_code, [5, 6, 7, 8, 9])
 
 
-def calc(code, phase_func, phase_settings):
+def find_max_signal(code, phase_settings):
     max_signal = 0
     combos = itertools.permutations(phase_settings, 5)
     for phase_settings in combos:
-        # print(phase_settings)
-        val = phase_func(code, phase_settings)
+        val = find_thruster_signal(code, phase_settings)
         max_signal = max(val, max_signal)
     return max_signal
 
 
-def find_thruster_signal_phase_1(code, phase_settings):
-    input_signal = 0
-    for i in range(0, 5):
-        outputs, _ = day5.calc(code, [phase_settings[i], input_signal])
-        input_signal = outputs[-1]
-    return input_signal
+@dataclasses.dataclass
+class Amp:
+    code: list
+    code_pointer: int = 0
+    halted: bool = False
+
+    def amplify(self, inputs):
+        outputs, self.halted, self.code_pointer = day5.calc(self.code, inputs, self.code_pointer)
+        return outputs
 
 
-def find_thruster_signal_phase_2(code, phase_settings):
+def find_thruster_signal(amp_code, phase_settings):
     input_signals = [0]
-    amps = []
     num_amps = len(phase_settings)
+    amps = []
     for i in range(num_amps):
-        amps.append(deepcopy(code))
+        amp = Amp(deepcopy(amp_code))
+        amps.append(amp)
+        amp.amplify([phase_settings[i]])
 
-    finished = False
+    while True:
+        for amp in amps:
+            input_signals = amp.amplify(input_signals)
 
-    first_pass = True
-    while not finished:
-        for i in range(num_amps):
-            if first_pass:
-                input_signals = [phase_settings[i]] + input_signals
-            outputs, finished = day5.calc(amps[i], input_signals)
-            input_signals = outputs
-        first_pass = False
-    return input_signals[-1]
+        if amps[-1].halted:
+            return input_signals[-1]
 
 
 if __name__ == "__main__":
     with Path(__file__).parent.joinpath("input/day7_sample" if TEST_MODE else "input/day7").open() as f:
         values = [int(x) for x in [i.split(',') for i in f][0]]
-        # print(f'Phase 1: {phase1(values)}')
+        print(f'Phase 1: {phase1(values)}')
         print(f'Phase 2: {phase2(values)}')

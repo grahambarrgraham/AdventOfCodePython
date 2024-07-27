@@ -1,9 +1,7 @@
-import dataclasses
 import itertools
 from copy import deepcopy
 from pathlib import Path
-
-import day5
+from computer import Computer
 
 TEST_MODE = False
 
@@ -25,29 +23,18 @@ def find_max_signal(code, phase_settings):
     return max_signal
 
 
-@dataclasses.dataclass
-class Amp:
-    code: list
-    code_pointer: int = 0
-    halted: bool = False
-
-    def amplify(self, inputs):
-        outputs, self.halted, self.code_pointer = day5.calc(self.code, inputs, self.code_pointer)
-        return outputs
-
-
 def find_thruster_signal(amp_code, phase_settings):
     input_signals = [0]
     num_amps = len(phase_settings)
     amps = []
     for i in range(num_amps):
-        amp = Amp(deepcopy(amp_code))
+        amp = Computer(deepcopy(amp_code))
         amps.append(amp)
-        amp.amplify([phase_settings[i]])
+        amp.compute([phase_settings[i]])
 
     while True:
         for amp in amps:
-            input_signals = amp.amplify(input_signals)
+            input_signals = amp.compute(input_signals)
 
         if amps[-1].halted:
             return input_signals[-1]

@@ -1,17 +1,17 @@
 from pathlib import Path
 
-import day5
+from computer import Computer
 
 TEST_MODE = False
 
 
 def phase1(code):
-    outputs, _, _ = day5.calc(code, [] if TEST_MODE else [1])
+    outputs = Computer(code).compute([] if TEST_MODE else [1])
     return outputs[-1]
 
 
 def phase2(code):
-    outputs, _, _ = day5.calc(code, [] if TEST_MODE else [2])
+    outputs = Computer(code).compute([] if TEST_MODE else [2])
     return outputs[-1]
 
 

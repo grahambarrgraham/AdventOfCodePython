@@ -75,11 +75,16 @@ def phase2(code):
     game = Game(Computer(code), {})
     game.start()
     target_x = project(game)
+
     while game.num_blocks > 0:
         prev_ball_pos = game.ball
-        game.move(1 if target_x > game.paddle.x else -1 if target_x < game.paddle.x else 0)
-        if game.ball.y <= prev_ball_pos.y and game.paddle.y - game.ball.y == 2:
+        direction = 1 if target_x > game.paddle.x else -1 if target_x < game.paddle.x else 0
+        game.move(direction)
+        ball_rising = game.ball.y <= prev_ball_pos.y
+
+        if ball_rising and game.paddle.y - game.ball.y == 2:
             target_x = project(game)
+
     return game.score
 
 

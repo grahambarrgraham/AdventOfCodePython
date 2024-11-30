@@ -8,7 +8,7 @@ class Computer:
     relative_index = 0
     inputs = []
 
-    def __init__(self, code):
+    def __init__(self, code: list[int]):
         self.memory = defaultdict(int, dict(enumerate(code)))
 
     def compute(self, new_inputs: list):

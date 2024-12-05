@@ -1,7 +1,7 @@
 #!/bin/bash
 
-YEAR="${2:-2019}"
-SESSION_ID='53616c7465645f5f445a27a55b4cc3a694517f67ceab7023fcff3bd61fdd3b6b102f51b52649a0d6b2b9776b387f2bb5db16ca5e344266a15cbd67c8470ef5db'
+YEAR="${2:-2024}"
+SESSION_ID='53616c7465645f5fc7e9d66574d544cf2ba77a5dc52957e1a5c0a1bbe62f804e4f5c7964b2e5245e6a0b25684d68704c040c361a4b5938624c4ffb3bf30d7435'
 
 echo "creating : $YEAR/day$1.py"
 sed  "s|dayn|day$1|g" "day_n.py" | sed "s|/day/n|/day/$1|g" > "$YEAR/day$1.py"
@@ -28,3 +28,4 @@ curl "https://adventofcode.com/$YEAR/day/$1/input" \
   -H 'accept-language: en-GB,en-US;q=0.9,en;q=0.8' \
   -H "cookie: _ga=GA1.2.510370946.1605541548; session=$SESSION_ID; _gid=GA1.2.1838548585.1606854098" \
   --compressed > "$YEAR/input/day$1"
+

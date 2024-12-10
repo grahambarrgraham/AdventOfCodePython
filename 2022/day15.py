@@ -28,7 +28,7 @@ def phase2(y_index):
 def build_index(v_sensors):
     y_index = {}
     for sensor in v_sensors:
-        update_index(y_index, sensor.location, sensor.manhattan)
+        update_index(y_index, sensor.robots, sensor.manhattan)
     return y_index
 
 

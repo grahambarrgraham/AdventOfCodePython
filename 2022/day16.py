@@ -36,12 +36,12 @@ def find_neighbours(state, graph):
     neighbours = []
     current_release_rate = release_rate(state.open_valves, graph)
     pressure_released = state.pressure_released + current_release_rate
-    if state.location not in state.open_valves:
-        open_valves = state.open_valves.union({state.location})
-        next_state = State(state.location, pressure_released, state.move_count + 1, open_valves)
+    if state.robots not in state.open_valves:
+        open_valves = state.open_valves.union({state.robots})
+        next_state = State(state.robots, pressure_released, state.move_count + 1, open_valves)
         neighbours.append(next_state)
 
-    for neighbour in graph.valves[state.location].tunnels:
+    for neighbour in graph.valves[state.robots].tunnels:
         next_state = State(neighbour, pressure_released, state.move_count + 1, state.open_valves)
         neighbours.append(next_state)
 

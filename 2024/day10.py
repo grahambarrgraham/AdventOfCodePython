@@ -25,8 +25,7 @@ class Graph:
     def destination(self, x, y):
         return self.map_[y][x] == 9
 
-    def search(self, start, all_routes):
-        visited = {start}
+    def search(self, start):
         queue = collections.deque()
         queue.append((start, 0))
         results = list()
@@ -38,22 +37,19 @@ class Graph:
 
             neighbours = self.neighbours(*node)
             for neighbour in neighbours:
-                if neighbour not in visited:
-                    if not all_routes:
-                        visited.add(neighbour)
-                    next_val = (neighbour, distance + 1)
-                    queue.append(next_val)
+                next_val = (neighbour, distance + 1)
+                queue.append(next_val)
         return results
 
 
 def phase1(v):
     graph = Graph(v)
-    return sum([len(set(graph.search(start, False))) for start in graph.starts])
+    return sum([len(set(graph.search(start))) for start in graph.starts])
 
 
 def phase2(v):
     graph = Graph(v)
-    return sum([len(graph.search(start, True)) for start in graph.starts])
+    return sum([len(graph.search(start)) for start in graph.starts])
 
 
 if __name__ == "__main__":

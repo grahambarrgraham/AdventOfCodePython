@@ -1,7 +1,7 @@
 #!/bin/bash
 
 YEAR="${2:-2024}"
-SESSION_ID='53616c7465645f5fc7e9d66574d544cf2ba77a5dc52957e1a5c0a1bbe62f804e4f5c7964b2e5245e6a0b25684d68704c040c361a4b5938624c4ffb3bf30d7435'
+SESSION_ID='53616c7465645f5f94e0953a2bef9137561528f85955891066dc77e93c69212e5ea38d1370913a540d92601b7600824de3ba7ff6b3f7caa479b10dc14666f5b1'
 
 echo "creating : $YEAR/day$1.py"
 sed  "s|dayn|day$1|g" "day_n.py" | sed "s|/day/n|/day/$1|g" > "$YEAR/day$1.py"

@@ -35,9 +35,9 @@ def search(map_, start_loc: Coord, goal_func, max_moves, min_moves):
 
     result = astar.find_path(start, None,
                              lambda search_node: valid_moves(map_, search_node, max_moves, min_moves),
-                             heuristic_cost_estimate_fnct=lambda a, b: 0,
-                             distance_between_fnct=lambda a, b: cost(map_, a.loc, b.loc),
-                             is_goal_reached_fnct=goal_func
+                             heuristic_cost_estimate_fun=lambda a, b: 0,
+                             edge_cost_fun=lambda a, b: cost(map_, a.loc, b.loc),
+                             is_goal_reached_fun=goal_func
                              )
     result = list(result)
     costs = [cost(map_, result[x].loc, result[x + 1].loc) for x in range(len(result) - 1)]

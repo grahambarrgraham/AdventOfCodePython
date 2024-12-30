@@ -189,7 +189,7 @@ def phase2(v):
 
 def calc(v, func):
     for i in v.directions:
-        v.map.apply(i, func)
+        v.map.apply_phase_2(i, func)
         # print(f"{i} {v.map.loc}, {v.map.direction}")
     return (1000 * (v.map.loc.y + 1)) + (4 * (v.map.loc.x + 1)) + dir_score_map[v.map.direction]
 

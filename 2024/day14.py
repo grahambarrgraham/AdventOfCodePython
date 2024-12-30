@@ -8,19 +8,19 @@ TEST_MODE = False
 width, height = (11, 7) if TEST_MODE else (101, 103)
 
 
-def phase1(pos_: dict[int, tuple], vel_: dict[int, tuple]):
+def phase1(pos: dict[int, tuple], vel: dict[int, tuple]):
     for s in range(100):
-        move_robots(pos_, vel_)
-    return reduce(lambda a, b: a * b, quadrants(group_by_position(pos_.values())).values(), 1)
+        move_robots(pos, vel)
+    robots = pos.values()
+    return reduce(lambda a, b: a * b, quadrants(group_by_position(robots)).values(), 1)
 
 
 def phase2(pos: dict[int, tuple], vel: dict[int, tuple]):
-    seconds = 1
-    while (not christmas_tree(pos)) and seconds < 200000:
-        # print(seconds)
+    for seconds in range(1, 10000):
+        if christmas_tree(pos):
+            return seconds
         move_robots(pos, vel)
-        seconds += 1
-    return seconds
+    return None
 
 
 def christmas_tree(pos):

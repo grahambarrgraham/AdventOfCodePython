@@ -98,7 +98,7 @@ class Map:
 
 def phase1(v):
     for i in v.directions:
-        v.map.apply(i)
+        v.map.apply_phase_2(i)
 
     return (1000 * (v.map.loc.y + 1)) + (4 * (v.map.loc.x + 1)) + dir_score_map[v.map.direction]
 

@@ -55,7 +55,7 @@ def cost(a: SearchNode, b: SearchNode):
     return result
 
 
-def search_graph(map_) -> Union[Iterator[tuple[list, float]], None]:
+def search_graph(map_) -> Union[Iterator[Iterator[SearchNode]], None]:
     graph = Graph(map_)
 
     def neighbours(node: SearchNode):
@@ -77,14 +77,14 @@ def search_graph(map_) -> Union[Iterator[tuple[list, float]], None]:
 
 
 def phase1(v):
-    _, path_cost = next(search_graph(v))
+    _, path_cost = next(next(search_graph(v)))
     return path_cost
 
 
 def phase2(v):
-    paths, _ = next(search_graph(v))
+    paths = next(search_graph(v))
     result = set()
-    for path in paths:
+    for path, _ in paths:
         result |= {node.loc for node in path}
     return len(result)
 

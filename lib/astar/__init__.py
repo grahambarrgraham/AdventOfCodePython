@@ -104,24 +104,23 @@ class AStar(ABC, Generic[T]):
         raise NotImplementedError
 
     @staticmethod
-    def reconstruct_paths(last: SearchNode) -> tuple[list[T], float]:
+    def reconstruct_paths(last: SearchNode) -> Union[Iterable[T], None]:
         """
         Returns all paths that have the same end score, along with the score
         """
         queue = [[last]]
-        paths = []
         while len(queue) > 0:
-            current = queue.pop(0)
+            current = queue.pop()
             parents = current[0].came_from
 
             if len(parents) == 0:
-                paths.append([i.data for i in reversed(current)])
+                yield [i.data for i in reversed(current)], last.g_score
                 continue
 
             for parent in parents:
                 queue.append([parent] + current)
 
-        return paths, last.f_score
+        return None
 
     def astar(self, start: T) -> Union[Iterable[T], None]:
         if self.is_goal_reached(start):
@@ -176,9 +175,9 @@ U = TypeVar("U")
 def find_path(
         start: U,
         neighbors_fun: Callable[[U], Iterable[U]],
-        heuristic_cost_estimate_fun: Callable[[U], float] = lambda a, b: infinity,
-        edge_cost_fun: Callable[[U, U], float] = lambda a, b: 1.0,
-        is_goal_reached_fun: Callable[[U], bool] = lambda a, b: a == b,
+        is_goal_reached_fun: Callable[[U], bool],
+        heuristic_cost_estimate_fun: Callable[[U], float] = lambda a: infinity,
+        edge_cost_fun: Callable[[U, U], float] = lambda a, b: 1.0
 ) -> Union[Iterable[U], None]:
     """A non-class version of the path finding algorithm. Returns a generator of lists of paths, starting from the
     lowest cost paths, then increasing.  Set heuristic_cost_estimate_fun to return makes turns this algorithm to dykstra.
